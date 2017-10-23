@@ -293,7 +293,7 @@
 
 
 			/* Loop dynamically Backtraces MED */
-			arrSeq = backTrace3(matRes);
+			arrSeq = backTrace(matRes);
 			for(i=0;i<$("#firstString").val().length+2;i++){
 				for(j=0;j<$("#secondString").val().length+2;j++){
 					var tr = $("#matrixBacktraces tr:last");
@@ -382,7 +382,7 @@
 			}
 
 			/* Loop dynamically Backtrace LED */
-			arrSeq = backTrace3(matLev);
+			arrSeq = backTrace(matLev);
 			for(i=0;i<$("#firstString").val().length+2;i++){
 				for(j=0;j<$("#secondString").val().length+2;j++){
 					var tr = $("#matrixBacktraceL tr:last");

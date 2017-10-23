@@ -163,7 +163,7 @@ function LED(string1, string2){
  * @param  {Array2D} matrix matrix value of MED/LED that can be obtain from LED(),MED() function.
  * @return {Array2D}        Array of Matrix that contain i,j,operation property.
  */
-function backTrace3(matrix){
+function backTrace(matrix){
 	
 	var seqResult = [];
 	var l1 = matrix.length;
