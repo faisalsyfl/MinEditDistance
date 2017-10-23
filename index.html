@@ -1,0 +1,533 @@
+<!-- 
+	Minimum Edit Distance Prototype
+	Arranged By Faisal S.A
+	18 October 2017
+	about.me/faisalsyfl
+ -->
+ <!-- Edited in 23 Okctober 2017 -->
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+	<!-- Page Header -->
+	<title>Minimum Edit Distance Prototype</title>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="assets/css/main.css">
+  	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  	<link rel="stylesheet" href="assets/css/font-awesome.min.css">  	
+  	<link rel="stylesheet" href="assets/style.css">  	
+	<link rel="icon" href="assets/img/favicon.ico">
+  	<script src="assets/js/jquery.min.js"></script>
+  	<script src="assets/js/bootstrap.min.js"></script>
+  	<script src="src/MinEditDistance.js"></script>
+</head>
+<body onload="load()">
+	<!-- Navigation  -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a style="padding-top: 10px; color:white;" class="navbar-brand">&nbsp;&nbsp;<span><img src="assets/img/h.png" width="5%">&nbsp;&nbsp;</span>Minimum Edit Distance Prototype</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul style="padding-right: 10px;" class="nav navbar-nav navbar-right">
+					<li>
+						<div style="padding: 8px 5px 0px 0px">
+							<button class="btn btn-warning" type="button" onclick="toggleFullScreen()"><span class="glyphicon glyphicon-fullscreen"></span></button>
+						</div>
+					</li>
+					<li>					
+						<div class="dropdown" style="padding: 8px 5px 0px 0px" id="dropdown">
+		  					<button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;About</button>
+						  	<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							    <li class="dropdown-header">Programmer</li>
+							    <li><a href="http://about.me/faisalsyfl" target="_blank">Faisal Syaiful Anwar</a></li>
+						  	</ul>
+						</div>
+					</li>					
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="loader"></div>
+
+	<!-- Page Container -->
+	<div class="container animate-bottom" style="display: none; padding-top: 70px;" id="container">
+		<div class="row">
+			<div class="col-md-12">
+			<div class="alert alert-warning alert-dismissible" role="alert">
+			  	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	<span class="glyphicon glyphicon-alert aria-hidden="true"></span>&nbsp;&nbsp;We recommend using Google Chrome browser to keep our program running as it should.
+			</div>
+			</div>
+		</div>
+		<div class="row" id="rowmanual">
+			<div class="col-md-12">
+				<div class="panel panel-primary">
+	  				<div class="panel-heading">
+	    				<h3 class="panel-title"><span class="glyphicon glyphicon-pencil aria-hidden="true"></span>&nbsp;&nbsp;Input Form</h3>
+				  	</div>
+	  				<div class="panel-body">
+	  					<h3>Input String(s)</h3>
+							<div class="form-group">
+						    <label >First</label>
+						    <input type="text" id="firstString" class="form-control" placeholder="First String" name="first" required="">
+						  </div>
+  							<div class="form-group">
+						    <label >Second</label>
+						    <input type="text" id="secondString" class="form-control" placeholder="Second String" name="second" required="">
+						  </div>	<br>
+							<input type="submit" class="btn btn-success form-control " data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>" id="submitm" value="Submit">											  								  						  
+						</form>
+					</div>
+				</div>	
+			</div>
+		</div>
+		<div id="hasil" class="row" style="display: none;">
+			<div class="col-md-12">
+				<div class="panel panel-primary">
+	  				<div class="panel-heading">
+	    				<h3 class="panel-title"><span class="glyphicon glyphicon-check aria-hidden="true"></span>&nbsp;&nbsp;Calculate Result</h3>
+				  	</div>
+	  				<div class="panel-body">
+	  					<div class="row">
+	  						<div class="col-md-6">
+			  					<div class="panel panel-info">
+					  				<div class="panel-heading">
+					    				<h3 class="panel-title">Matrix Edit Distance</h3>
+								  	</div>
+								  	<div class="panel-body">
+					  					<table class="table table-condensed text-center">
+					  						<tbody id="matrixRes">
+					  							
+					  						</tbody>
+					  					</table>
+					  					Note : Insertion + 1, Deletion + 1, Substitution + 1
+									</div>
+								</div>
+							</div>
+	  						<div class="col-md-6">
+			  					<div class="panel panel-info">
+					  				<div class="panel-heading">
+					    				<h3 class="panel-title">Matrix Levensthein Distance</h3>
+								  	</div>
+								  	<div class="panel-body">
+					  					<table class="table table-condensed text-center">
+					  						<tbody id="matrixLev">
+					  							
+					  						</tbody>
+					  					</table>
+					  					Note : Insertion + 1, Deletion + 1, Substitution + 2
+									</div>
+								</div>
+							</div>							
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="panel panel-info">
+					  				<div class="panel-heading">
+					    				<h3 class="panel-title">Backtrace MED</h3>
+								  	</div>
+								  	<div class="panel-body">
+										<table class="table table-condensed text-center">
+											<tbody id="matrixBacktraces"></tbody>
+					  					</table>
+										Note : Keep in mind that backtrack algorithm, has the result of a decision tree. Thus, there are several choices of operations for each edit (not always the same as the example).		  							
+					  				</div>
+								</div>						
+							</div>
+							<div class="col-md-6">
+								<div class="panel panel-info">
+					  				<div class="panel-heading">
+					    				<h3 class="panel-title">Backtrace LD</h3>
+								  	</div>
+								  	<div class="panel-body">
+										<table class="table table-condensed text-center">
+											<tbody id="matrixBacktraceL"></tbody>
+					  					</table>
+					  					Note : if you see backtrack differences, it can be concluded that Levenshtein assumes that substitution operations are worth 2, so it's better to perform another operation of value 1.
+					  				</div>
+								</div>						
+							</div>							
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="panel panel-info">
+					  				<div class="panel-heading">
+					    				<h3 class="panel-title">Alignment Minimum Edit Distance</h3>
+								  	</div>
+								  	<div class="panel-body">
+										<table class="table table-condensed text-center">
+											<tbody id="resultMED">
+												
+											</tbody>
+					  					</table>
+					  					Note : 
+					  					<button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Insertion"></button>
+					  					<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Deletion"></button>
+					  					<button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Substitution"></button>
+					  					<button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Equal"></button>
+					  				</div>
+								</div>						
+							</div>
+							<div class="col-md-6">
+								<div class="panel panel-info">
+					  				<div class="panel-heading">
+					    				<h3 class="panel-title">Alignment Levensthein Distance</h3>
+								  	</div>
+								  	<div class="panel-body">
+										<table class="table table-condensed text-center">
+											<tbody id="resultLED"></tbody>
+					  					</table>	
+										Note : 
+					  					<button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Insertion"></button>
+					  					<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Deletion"></button>
+					  					<button type="button" class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Substitution"></button>
+					  					<button type="button" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Equal"></button>					  						
+					  				</div>
+								</div>						
+							</div>							
+						</div>													
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+			
+<script>
+
+	Array.prototype.remove = function(from, to) {
+	  var rest = this.slice((to || from) + 1 || this.length);
+	  this.length = from < 0 ? this.length + from : from;
+	  return this.push.apply(this, rest);
+	};
+
+	$('#submitm').on('click',function() {
+
+		/*Reset all table*/
+		$('#matrixRes > tr').each(function() {$(this).remove()});
+		$('#matrixLev > tr').each(function() {$(this).remove()});
+		$('#matrixBacktraces > tr').each(function() {$(this).remove()});
+		$('#matrixBacktraceL > tr').each(function() {$(this).remove()});
+		$('#resultMED > tr').each(function() {$(this).remove()});
+		$('#resultLED > tr').each(function() {$(this).remove()});
+
+		/* Do all the task, when user clicked Submit*/
+		var $this = $(this);
+		$this.button('loading');
+		setTimeout(function() {
+			$this.button('reset');
+
+			/* Loop dynamically Matrices MED */
+			matRes =  MED($("#firstString").val(),$("#secondString").val());
+			for(i=0;i<$("#firstString").val().length+2;i++){
+				for(j=0;j<$("#secondString").val().length+2;j++){
+					var tr = $("#matrixRes tr:last");
+
+					if(!tr.length || tr.find("td").length >= $("#secondString").val().length+2)
+					    	$("#matrixRes").append("<tr>");
+
+					if(i==0){
+						if(j==0){
+							$('#matrixRes tr:last').append("<td></td>");
+						}else if(j==1){
+							$('#matrixRes tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixRes tr:last').append("<td>"+$('#secondString').val().charAt(j-2)+"</td>");
+						}
+					}else if(i==1){
+						if(j==0){
+							$('#matrixRes tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixRes tr:last').append("<td>"+matRes[i-1][j-1]+"</td>");
+						}
+					}else{
+						if(j==0){
+							$('#matrixRes tr:last').append("<td>"+$('#firstString').val().charAt(i-2)+"</td>");
+						}else{
+							$('#matrixRes tr:last').append("<td>"+matRes[i-1][j-1]+"</td>");
+						}						
+					}
+				}
+			}
+			$("#matrixRes tr:first").addClass("bg-danger");
+			$('#matrixRes > tr').each(function() {$(this).find("td:first").addClass("bg-danger")});
+			$('#matrixRes tr:last td:last').addClass("bg-success");
+			
+			/* Loop dynamically Matrices LED */
+			matLev =  LED($("#firstString").val(),$("#secondString").val());
+			// console.log(matLev);
+			for(i=0;i<$("#firstString").val().length+2;i++){
+				for(j=0;j<$("#secondString").val().length+2;j++){
+					var tr = $("#matrixLev tr:last");
+
+					if(!tr.length || tr.find("td").length >= $("#secondString").val().length+2)
+					    	$("#matrixLev").append("<tr>");
+
+					if(i==0){
+						if(j==0){
+							$('#matrixLev tr:last').append("<td></td>");
+						}else if(j==1){
+							$('#matrixLev tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixLev tr:last').append("<td>"+$('#secondString').val().charAt(j-2)+"</td>");
+						}
+					}else if(i==1){
+						if(j==0){
+							$('#matrixLev tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixLev tr:last').append("<td>"+matLev[i-1][j-1]+"</td>");
+						}
+					}else{
+						if(j==0){
+							$('#matrixLev tr:last').append("<td>"+$('#firstString').val().charAt(i-2)+"</td>");
+						}else{
+							$('#matrixLev tr:last').append("<td>"+matLev[i-1][j-1]+"</td>");
+						}						
+					}
+				}
+			}
+			$("#matrixLev tr:first").addClass("bg-danger");
+			$('#matrixLev tr').each(function() {$(this).find("td:first").addClass("bg-danger")});
+			$('#matrixLev tr:last td:last').addClass("bg-success");
+
+
+			/* Loop dynamically Backtraces MED */
+			arrSeq = backTrace3(matRes);
+			for(i=0;i<$("#firstString").val().length+2;i++){
+				for(j=0;j<$("#secondString").val().length+2;j++){
+					var tr = $("#matrixBacktraces tr:last");
+
+					if(!tr.length || tr.find("td").length >= $("#secondString").val().length+2)
+					    	$("#matrixBacktraces").append("<tr>");
+
+					if(i==0){
+						if(j==0){
+							$('#matrixBacktraces tr:last').append("<td></td>");
+						}else if(j==1){
+							$('#matrixBacktraces tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixBacktraces tr:last').append("<td>"+$('#secondString').val().charAt(j-2)+"</td>");
+						}
+					}else if(i==1){
+						if(j==0){
+							$('#matrixBacktraces tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixBacktraces tr:last').append("<td>"+matRes[i-1][j-1]+"</td>");
+						}
+					}else{
+						if(j==0){
+							$('#matrixBacktraces tr:last').append("<td>"+$('#firstString').val().charAt(i-2)+"</td>");
+						}else{
+							$('#matrixBacktraces tr:last').append("<td>"+matRes[i-1][j-1]+"</td>");
+						}						
+					}
+				}
+			}
+			$("#matrixBacktraces tr:first").addClass("bg-danger");
+			$('#matrixBacktraces tr').each(function() {$(this).find("td:first").addClass("bg-danger")});
+			$('#matrixBacktraces tr:last td:last').addClass("bg-success");
+
+			var table = $("#matrixBacktraces")[0];
+			var count = 0;
+			var cI = 0;
+			var cD = 0;
+			var le1 = $("#secondString").val().length;
+			var le2 = $("#firstString").val().length;
+			for(i=0;i<arrSeq.length;i++){
+				if(arrSeq[i].operation != 0){
+					if(arrSeq[i].operation == 2){
+						le1++;
+					}else if(arrSeq[i].operation == 1){
+						le2++;
+					}
+					count++;
+				}
+				var cell = table.rows[arrSeq[i].i+1].cells[arrSeq[i].j+1]; // This is a DOM "TD" element
+				var $cell = $(cell);
+				$cell.addClass('bg-success');
+			}
+			/* Loop dynamically Alignment MED */
+			for(i=0;i<3;i++){
+				for(j=count-2;j>=0;j--){
+					var tr = $("#resultMED tr:last");
+
+					if(!tr.length || tr.find("td").length >= le1)
+					    	$("#resultMED").append("<tr>");
+					if(i == 0){
+						if(arrSeq[j].operation == 2){
+							$('#resultMED tr:last').append("<td>*</td>");
+						}else{
+							$('#resultMED tr:last').append("<td>"+$("#secondString").val().charAt(arrSeq[j].j-1)+"</td>");
+						}
+					}else if(i == 1){
+						if(arrSeq[j].operation == 1){
+							$('#resultMED tr:last').append("<td class='bg-info'>|</td>");
+						}else if(arrSeq[j].operation == 2){
+							$('#resultMED tr:last').append("<td class='bg-danger'>|</td>");
+						}else if(arrSeq[j].operation == 3){
+							$('#resultMED tr:last').append("<td class='bg-warning'>|</td>");
+						}else if(arrSeq[j].operation == 4){
+							$('#resultMED tr:last').append("<td class='bg-success'>|</td>");
+						}
+					}else if(i == 2){
+						if(arrSeq[j].operation == 1){
+							$('#resultMED tr:last').append("<td>*</td>");
+						}else{
+							$('#resultMED tr:last').append("<td>"+$("#firstString").val().charAt(arrSeq[j].i-1)+"</td>");
+						}
+						
+					}
+				}
+			}
+
+			/* Loop dynamically Backtrace LED */
+			arrSeq = backTrace3(matLev);
+			for(i=0;i<$("#firstString").val().length+2;i++){
+				for(j=0;j<$("#secondString").val().length+2;j++){
+					var tr = $("#matrixBacktraceL tr:last");
+
+					if(!tr.length || tr.find("td").length >= $("#secondString").val().length+2)
+					    	$("#matrixBacktraceL").append("<tr>");
+
+					if(i==0){
+						if(j==0){
+							$('#matrixBacktraceL tr:last').append("<td></td>");
+						}else if(j==1){
+							$('#matrixBacktraceL tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixBacktraceL tr:last').append("<td>"+$('#secondString').val().charAt(j-2)+"</td>");
+						}
+					}else if(i==1){
+						if(j==0){
+							$('#matrixBacktraceL tr:last').append("<td>#</td>");
+						}else{
+							$('#matrixBacktraceL tr:last').append("<td>"+matLev[i-1][j-1]+"</td>");
+						}
+					}else{
+						if(j==0){
+							$('#matrixBacktraceL tr:last').append("<td>"+$('#firstString').val().charAt(i-2)+"</td>");
+						}else{
+							$('#matrixBacktraceL tr:last').append("<td>"+matLev[i-1][j-1]+"</td>");
+						}						
+					}
+				}
+			}
+			$("#matrixBacktraceL tr:first").addClass("bg-danger");
+			$('#matrixBacktraceL tr').each(function() {$(this).find("td:first").addClass("bg-danger")});
+			$('#matrixBacktraceL tr:last td:last').addClass("bg-success");
+
+			var table = $("#matrixBacktraceL")[0];
+			count = 0;
+			cI = 0;
+			cD = 0;
+			le1 = $("#secondString").val().length;
+			le2 = $("#firstString").val().length;			
+			for(i=0;i<arrSeq.length;i++){
+				if(arrSeq[i].operation != 0){
+					if(arrSeq[i].operation == 2){
+						le1++;
+					}else if(arrSeq[i].operation == 1){
+						le2++;
+					}
+					count++;
+				}				
+				var cell = table.rows[arrSeq[i].i+1].cells[arrSeq[i].j+1]; // This is a DOM "TD" element
+				var $cell = $(cell);
+				$cell.addClass('bg-success');
+			}
+
+			/* Loop dynamically Alignment LED*/
+			for(i=0;i<3;i++){
+				for(j=count-2;j>=0;j--){
+					var tr = $("#resultLED tr:last");
+
+					if(!tr.length || tr.find("td").length >= le1)
+					    	$("#resultLED").append("<tr>");
+					if(i == 0){
+						if(arrSeq[j].operation == 2){
+							$('#resultLED tr:last').append("<td>*</td>");
+						}else{
+							$('#resultLED tr:last').append("<td>"+$("#secondString").val().charAt(arrSeq[j].j-1)+"</td>");
+						}
+					}else if(i == 1){
+						if(arrSeq[j].operation == 1){
+							$('#resultLED tr:last').append("<td class='bg-info'>|</td>");
+						}else if(arrSeq[j].operation == 2){
+							$('#resultLED tr:last').append("<td class='bg-danger'>|</td>");
+						}else if(arrSeq[j].operation == 3){
+							$('#resultLED tr:last').append("<td class='bg-warning'>|</td>");
+						}else if(arrSeq[j].operation == 4){
+							$('#resultLED tr:last').append("<td class='bg-success'>|</td>");
+						}
+					}else if(i == 2){
+						if(arrSeq[j].operation == 1){
+							$('#resultLED tr:last').append("<td>*</td>");
+						}else{
+							$('#resultLED tr:last').append("<td>"+$("#firstString").val().charAt(arrSeq[j].i-1)+"</td>");
+						}
+						
+					}
+				}
+			}			
+
+			$("#hasil").show("slow");
+
+	   	}, 1000);		
+	});
+
+	/*Other Function and Variable for CSS & JS (Visual Things)*/
+
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+	var timer;
+	function load() {
+	    timer = setTimeout(showContainer, 1000);	
+	}
+
+	function showContainer() {
+	  document.getElementById("loader").style.display = "none";
+	  document.getElementById("container").style.display = "block";
+	}
+
+	// Error Handling
+    $('#reset').on('click',function() {
+		$("#inputres").modal();
+    	$("#hasil").hide("slow");
+    });
+
+    // About
+  	$('.dropdown').on('show.bs.dropdown', function() {
+    	$(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+  	});
+  	$('.dropdown').on('hide.bs.dropdown', function() {
+    	$(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+  	});
+
+  	/**
+  	 * toogling Full Screen for visual purposes
+  	 * @return {} 
+  	 */
+  	function toggleFullScreen() {
+	  	if ((document.fullScreenElement && document.fullScreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+		    if (document.documentElement.requestFullScreen) {  
+		      	document.documentElement.requestFullScreen();  
+		    }else if(document.documentElement.mozRequestFullScreen) {  
+		      	document.documentElement.mozRequestFullScreen();  
+		    }else if(document.documentElement.webkitRequestFullScreen) {  
+		      	document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);  
+		    }  
+	  	}else{  
+			if(document.cancelFullScreen) {  
+				document.cancelFullScreen();  
+			}else if(document.mozCancelFullScreen) {  
+				document.mozCancelFullScreen();  
+			}else if(document.webkitCancelFullScreen) {  
+				document.webkitCancelFullScreen();  
+			}  
+	  }  
+	}
+</script>
+</body>
+</html>
